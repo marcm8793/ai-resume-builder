@@ -1,4 +1,4 @@
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.svg";
 import resumePreview from "@/assets/resume-preview.jpg";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
