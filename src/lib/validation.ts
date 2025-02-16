@@ -68,7 +68,14 @@ export const educationSchema = z.object({
 export type EducationValues = z.infer<typeof educationSchema>;
 
 export const skillsSchema = z.object({
-  skills: z.array(z.string().trim()).optional(),
+  skills: z
+    .array(
+      z.object({
+        title: z.string().max(50).trim(),
+        skillItems: z.array(z.string().max(50).trim()).max(50),
+      }),
+    )
+    .optional(),
 });
 
 export type SkillsValues = z.infer<typeof skillsSchema>;

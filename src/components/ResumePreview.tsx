@@ -268,31 +268,40 @@ function SkillsSection({ resumeData }: ResumeSectionProps) {
         }}
       />
       <div className="break-inside-avoid space-y-3">
-        <p
-          className="text-lg font-semibold"
-          style={{
-            color: colorHex,
-          }}
-        >
+        <p className="text-lg font-semibold" style={{ color: colorHex }}>
           Skills
         </p>
-        <div className="flex break-inside-avoid flex-wrap gap-2">
-          {skills.map((skill, index) => (
-            <Badge
-              key={index}
-              className="rounded-md bg-black text-white hover:bg-black"
-              style={{
-                backgroundColor: colorHex,
-                borderRadius:
-                  borderStyle === BorderStyles.SQUARE
-                    ? "0px"
-                    : borderStyle === BorderStyles.CIRCLE
-                      ? "9999px"
-                      : "8px",
-              }}
+        <div className="space-y-2">
+          {skills.map((skillGroup, groupIndex) => (
+            <div
+              key={groupIndex}
+              className="flex flex-wrap items-center gap-x-2 gap-y-1"
             >
-              {skill}
-            </Badge>
+              {skillGroup.title && (
+                <span className="min-w-[120px] text-sm font-medium">
+                  {skillGroup.title}:
+                </span>
+              )}
+              <div className="flex flex-wrap items-center gap-1">
+                {skillGroup.skillItems.map((skill, index) => (
+                  <Badge
+                    key={index}
+                    className="rounded-md bg-black text-white hover:bg-black"
+                    style={{
+                      backgroundColor: colorHex,
+                      borderRadius:
+                        borderStyle === BorderStyles.SQUARE
+                          ? "0px"
+                          : borderStyle === BorderStyles.CIRCLE
+                            ? "9999px"
+                            : "8px",
+                    }}
+                  >
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
