@@ -70,7 +70,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <Button asChild>
-              <Link href="/sign-in">Get Started</Link>
+              <Link href="/resumes">Get Started</Link>
             </Button>
           </div>
         </div>
@@ -155,7 +155,7 @@ export default function Home() {
                     className="mt-6 w-full"
                     variant={plan.name === "Free" ? "outline" : "premium"}
                   >
-                    <Link href="/sign-up">Get Started</Link>
+                    <Link href="/resumes">Get Started</Link>
                   </Button>
                 </div>
               ))}
