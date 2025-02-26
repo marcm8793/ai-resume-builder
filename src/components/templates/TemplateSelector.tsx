@@ -11,29 +11,10 @@ import { TemplateValues } from "@/lib/validation";
 import { EditorFormProps } from "@/lib/types";
 import { getTemplates } from "./templateService";
 
-interface TemplateSelectorProps {
-  selectedTemplateId: string;
-  onTemplateSelect: (templateId: string) => void;
-}
-
 export default function TemplateSelector({
   resumeData,
   setResumeData,
 }: EditorFormProps) {
-  return (
-    <TemplatePicker
-      selectedTemplateId={resumeData.templateId || "classic"}
-      onTemplateSelect={(templateId) =>
-        setResumeData({ ...resumeData, templateId })
-      }
-    />
-  );
-}
-
-function TemplatePicker({
-  selectedTemplateId,
-  onTemplateSelect,
-}: TemplateSelectorProps) {
   const [open, setOpen] = useState(false);
   const templates = getTemplates();
 
@@ -56,12 +37,15 @@ function TemplatePicker({
               <button
                 key={template.templateId}
                 className={`rounded-lg border p-4 text-start transition-colors hover:bg-accent ${
-                  selectedTemplateId === template.templateId
+                  (resumeData.templateId || "classic") === template.templateId
                     ? "border-primary"
                     : ""
                 }`}
                 onClick={() => {
-                  onTemplateSelect(template.templateId || "classic");
+                  setResumeData({
+                    ...resumeData,
+                    templateId: template.templateId || "classic",
+                  });
                   setOpen(false);
                 }}
               >
