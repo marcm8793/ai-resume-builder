@@ -6,7 +6,13 @@ import usePremiumModal from "@/hooks/usePremiumModal";
 import { Check } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "../ui/dialog";
 import { createCheckoutSession } from "./actions";
 
 const premiumFeatures = ["AI tools", "Up to 3 resumes"];
@@ -47,6 +53,9 @@ export default function PremiumModal() {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Boring Resume Builder AI Premium</DialogTitle>
+          <DialogDescription>
+            Upgrade your account to access premium features and capabilities.
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-6">
           <p>Get a premium subscription to unlock more features.</p>

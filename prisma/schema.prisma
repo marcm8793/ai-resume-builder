@@ -20,6 +20,7 @@ model Resume {
 
   title       String?
   description String?
+  templateId  String  @default("classic")
 
   photoUrl    String?
   colorHex    String  @default("#000000")
