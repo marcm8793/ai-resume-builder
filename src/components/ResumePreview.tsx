@@ -6,6 +6,8 @@ import { formatDate } from "date-fns";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { Badge } from "./ui/badge";
+import { defaultTemplates } from "@/lib/templates";
+import ModernTemplate from "./templates/ModernTemplate";
 
 interface ResumePreviewProps {
   resumeData: ResumeValues;
@@ -19,8 +21,26 @@ export default function ResumePreview({
   className,
 }: ResumePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-
   const { width } = useDimensions(containerRef);
+
+  const template =
+    defaultTemplates.find((t) => t.templateId === resumeData.templateId) ||
+    defaultTemplates[0];
+
+  // Create a memoized version of resumeData with template properties
+  const resumeDataWithTemplate = {
+    ...resumeData,
+    photoPosition: template.photoPosition,
+    templateId: template.templateId,
+  };
+
+  const components = {
+    PersonalInfoHeader,
+    SummarySection,
+    WorkExperienceSection,
+    EducationSection,
+    SkillsSection,
+  };
 
   return (
     <div
@@ -31,18 +51,27 @@ export default function ResumePreview({
       ref={containerRef}
     >
       <div
-        className={cn("space-y-6 p-6", !width && "invisible")}
+        className={cn("flex flex-col space-y-6 p-6", !width && "invisible")}
         style={{
           zoom: (1 / 794) * width,
         }}
         ref={contentRef}
         id="resumePreviewContent"
       >
-        <PersonalInfoHeader resumeData={resumeData} />
-        <SummarySection resumeData={resumeData} />
-        <WorkExperienceSection resumeData={resumeData} />
-        <EducationSection resumeData={resumeData} />
-        <SkillsSection resumeData={resumeData} />
+        {template.templateId === "modern" ? (
+          <ModernTemplate
+            resumeData={resumeDataWithTemplate}
+            components={components}
+          />
+        ) : (
+          <div className="flex flex-col">
+            <PersonalInfoHeader resumeData={resumeDataWithTemplate} />
+            <SummarySection resumeData={resumeDataWithTemplate} />
+            <WorkExperienceSection resumeData={resumeDataWithTemplate} />
+            <EducationSection resumeData={resumeDataWithTemplate} />
+            <SkillsSection resumeData={resumeDataWithTemplate} />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -126,35 +155,50 @@ function PersonalInfoHeader({ resumeData }: ResumeSectionProps) {
 }
 
 function SummarySection({ resumeData }: ResumeSectionProps) {
-  const { summary, colorHex } = resumeData;
+  const { summary, colorHex, templateId } = resumeData;
+  const isModernTemplate = templateId === "modern";
 
   if (!summary) return null;
 
   return (
-    <>
+    // TODO: Check if I need flex flex-col
+    <div className="flex flex-col">
       <hr
-        className="border-2"
+        className={cn("mt-2 w-full border-2")}
         style={{
           borderColor: colorHex,
         }}
       />
-      <div className="break-inside-avoid space-y-3">
+      <div
+        className={cn(
+          "mt-2 break-inside-avoid space-y-3",
+          isModernTemplate && "space-y-2",
+        )}
+      >
         <p
           className="text-lg font-semibold"
           style={{
             color: colorHex,
           }}
         >
-          Professional profile
+          Profile
         </p>
-        <div className="whitespace-pre-line text-sm">{summary}</div>
+        <div
+          className={cn(
+            "whitespace-pre-line text-sm",
+            isModernTemplate && "text-xs",
+          )}
+        >
+          {summary}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
 function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
-  const { workExperiences, colorHex } = resumeData;
+  const { workExperiences, colorHex, templateId } = resumeData;
+  const isModernTemplate = templateId === "modern";
 
   const workExperiencesNotEmpty = workExperiences?.filter(
     (exp) => Object.values(exp).filter(Boolean).length > 0,
@@ -163,14 +207,15 @@ function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
   if (!workExperiencesNotEmpty?.length) return null;
 
   return (
-    <>
+    // TODO: Check if I need flex flex-col
+    <div className="flex flex-col">
       <hr
-        className="border-2"
+        className={cn("mt-2 w-full border-2")}
         style={{
           borderColor: colorHex,
         }}
       />
-      <div className="space-y-3">
+      <div className={cn("mt-2 space-y-3", isModernTemplate && "space-y-2")}>
         <p
           className="text-lg font-semibold"
           style={{
@@ -179,33 +224,45 @@ function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
         >
           Work experience
         </p>
-        {workExperiencesNotEmpty.map((exp, index) => (
-          <div key={index} className="break-inside-avoid space-y-1">
-            <div
-              className="flex items-center justify-between text-sm font-semibold"
-              style={{
-                color: colorHex,
-              }}
-            >
-              <span>{exp.position}</span>
-              {exp.startDate && (
-                <span>
-                  {formatDate(exp.startDate, "MM/yyyy")} -{" "}
-                  {exp.endDate ? formatDate(exp.endDate, "MM/yyyy") : "Present"}
-                </span>
-              )}
+        <div className={cn(isModernTemplate && "space-y-3")}>
+          {workExperiencesNotEmpty.map((exp, index) => (
+            <div key={index} className="break-inside-avoid space-y-1">
+              <div
+                className="flex items-center justify-between text-sm font-semibold"
+                style={{
+                  color: colorHex,
+                }}
+              >
+                <span>{exp.position}</span>
+                {exp.startDate && (
+                  <span className={cn(isModernTemplate && "text-xs")}>
+                    {formatDate(exp.startDate, "MM/yyyy")} -{" "}
+                    {exp.endDate
+                      ? formatDate(exp.endDate, "MM/yyyy")
+                      : "Present"}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs font-semibold">{exp.company}</p>
+              <div
+                className={cn(
+                  "whitespace-pre-line text-xs font-semibold",
+                  isModernTemplate && "text-[10px]",
+                )}
+              >
+                {exp.description}
+              </div>
             </div>
-            <p className="text-xs font-semibold">{exp.company}</p>
-            <div className="whitespace-pre-line text-xs">{exp.description}</div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
 function EducationSection({ resumeData }: ResumeSectionProps) {
-  const { educations, colorHex } = resumeData;
+  const { educations, colorHex, templateId } = resumeData;
+  const isModernTemplate = templateId === "modern";
 
   const educationsNotEmpty = educations?.filter(
     (edu) => Object.values(edu).filter(Boolean).length > 0,
@@ -214,79 +271,123 @@ function EducationSection({ resumeData }: ResumeSectionProps) {
   if (!educationsNotEmpty?.length) return null;
 
   return (
-    <>
+    // TODO: Check if I need flex flex-col
+    <div className="flex flex-col">
       <hr
-        className="border-2"
+        className={cn("mt-2 w-full border-2")}
         style={{
           borderColor: colorHex,
         }}
       />
-      <div className="space-y-3">
+      <div className="mt-2 space-y-3">
         <p
-          className="text-lg font-semibold"
+          className={cn("text-lg font-semibold", isModernTemplate && "text-xl")}
           style={{
             color: colorHex,
           }}
         >
           Education
         </p>
-        {educationsNotEmpty.map((edu, index) => (
-          <div key={index} className="break-inside-avoid space-y-1">
-            <div
-              className="flex items-center justify-between text-sm font-semibold"
-              style={{
-                color: colorHex,
-              }}
-            >
-              <span>{edu.degree}</span>
-              {edu.startDate && (
-                <span>
-                  {edu.startDate &&
-                    `${formatDate(edu.startDate, "MM/yyyy")} ${edu.endDate ? `- ${formatDate(edu.endDate, "MM/yyyy")}` : ""}`}
-                </span>
-              )}
+        <div className={cn(isModernTemplate && "space-y-4")}>
+          {educationsNotEmpty.map((edu, index) => (
+            <div key={index} className="break-inside-avoid space-y-1">
+              <div
+                className={cn(
+                  "flex items-center justify-between text-sm font-semibold",
+                  isModernTemplate && "text-base",
+                )}
+                style={{
+                  color: colorHex,
+                }}
+              >
+                <span>{edu.degree}</span>
+                {edu.startDate && (
+                  <span className={cn(isModernTemplate && "text-xs")}>
+                    {edu.startDate &&
+                      `${formatDate(edu.startDate, "MM/yyyy")} ${edu.endDate ? `- ${formatDate(edu.endDate, "MM/yyyy")}` : ""}`}
+                  </span>
+                )}
+              </div>
+              <p
+                className={cn(
+                  "text-xs font-semibold",
+                  isModernTemplate && "text-sm",
+                )}
+              >
+                {edu.school}
+              </p>
             </div>
-            <p className="text-xs font-semibold">{edu.school}</p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
 function SkillsSection({ resumeData }: ResumeSectionProps) {
-  const { skills, colorHex, borderStyle } = resumeData;
+  const { skills, colorHex, borderStyle, templateId } = resumeData;
 
   if (!skills?.length) return null;
 
+  const isModernTemplate = templateId === "modern";
+
   return (
-    <>
+    // TODO: Check if I need flex flex-col
+    <div className="flex flex-col">
       <hr
-        className="border-2"
+        className={cn("mt-2 w-full border-2")}
         style={{
           borderColor: colorHex,
         }}
       />
-      <div className="break-inside-avoid space-y-3">
-        <p className="text-lg font-semibold" style={{ color: colorHex }}>
+      <div className="mt-2 break-inside-avoid space-y-3">
+        <p
+          className={cn("text-lg font-semibold", isModernTemplate && "text-xl")}
+          style={{ color: colorHex }}
+        >
           Skills
         </p>
-        <div className="space-y-2">
+        <div
+          className={cn(
+            "space-y-2",
+            isModernTemplate && "flex flex-col space-y-4",
+          )}
+        >
           {skills.map((skillGroup, groupIndex) => (
             <div
               key={groupIndex}
-              className="flex flex-wrap items-center gap-x-2 gap-y-1"
+              className={cn(
+                "flex flex-wrap items-center gap-x-2 gap-y-1",
+                isModernTemplate && "flex-col items-start",
+              )}
             >
               {skillGroup.title && (
-                <span className="min-w-[120px] text-sm font-medium">
+                <span
+                  className={cn(
+                    "text-sm font-medium",
+                    isModernTemplate
+                      ? "mb-2 text-base font-semibold"
+                      : "min-w-[120px]",
+                  )}
+                  // TODO: Check if this is the correct way to do this
+                  style={{ color: isModernTemplate ? colorHex : "inherit" }}
+                >
                   {skillGroup.title}:
                 </span>
               )}
-              <div className="flex flex-wrap items-center gap-1">
+              <div
+                className={cn(
+                  "flex flex-wrap items-center gap-1",
+                  isModernTemplate && "w-full",
+                )}
+              >
                 {skillGroup.skillItems.map((skill, index) => (
                   <Badge
                     key={index}
-                    className="rounded-md bg-black text-white hover:bg-black"
+                    className={cn(
+                      "rounded-md bg-black text-white hover:bg-black",
+                      isModernTemplate && "mb-1",
+                    )}
                     style={{
                       backgroundColor: colorHex,
                       borderRadius:
@@ -305,6 +406,6 @@ function SkillsSection({ resumeData }: ResumeSectionProps) {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }
