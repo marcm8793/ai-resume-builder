@@ -86,6 +86,16 @@ export const summarySchema = z.object({
 
 export type SummaryValues = z.infer<typeof summarySchema>;
 
+export const templateSchema = z.object({
+  templateId: optionalString,
+  name: optionalString,
+  description: optionalString,
+  photoPosition: z.enum(["left", "right"]).optional(),
+  defaultBorderStyle: z.enum(["squircle", "circle"]).optional(),
+});
+
+export type TemplateValues = z.infer<typeof templateSchema>;
+
 export const resumeSchema = z.object({
   ...generalInfoSchema.shape,
   ...personalInfoSchema.shape,
@@ -93,6 +103,7 @@ export const resumeSchema = z.object({
   ...educationSchema.shape,
   ...skillsSchema.shape,
   ...summarySchema.shape,
+  ...templateSchema.shape,
   colorHex: optionalString,
   borderStyle: optionalString,
 });

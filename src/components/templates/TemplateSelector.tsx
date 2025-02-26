@@ -7,9 +7,9 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import { defaultTemplates } from "../../lib/templates";
 import { TemplateValues } from "@/lib/validation";
 import { EditorFormProps } from "@/lib/types";
+import { getTemplates } from "./templateService";
 
 interface TemplateSelectorProps {
   selectedTemplateId: string;
@@ -35,6 +35,7 @@ function TemplatePicker({
   onTemplateSelect,
 }: TemplateSelectorProps) {
   const [open, setOpen] = useState(false);
+  const templates = getTemplates();
 
   return (
     <>
@@ -51,7 +52,7 @@ function TemplatePicker({
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4">
-            {defaultTemplates.map((template: TemplateValues) => (
+            {templates.map((template: TemplateValues) => (
               <button
                 key={template.templateId}
                 className={`rounded-lg border p-4 text-start transition-colors hover:bg-accent ${
@@ -60,7 +61,7 @@ function TemplatePicker({
                     : ""
                 }`}
                 onClick={() => {
-                  onTemplateSelect(template.templateId);
+                  onTemplateSelect(template.templateId || "classic");
                   setOpen(false);
                 }}
               >
