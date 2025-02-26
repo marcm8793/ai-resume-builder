@@ -5,13 +5,14 @@ import PersonalInfoForm from "./forms/PersonalInfoForm";
 import SkillsForm from "./forms/SkillsForm";
 import SummaryForm from "./forms/SummaryForm";
 import WorkExperienceForm from "./forms/WorkExperienceForm";
-
+import TemplateSelector from "@/components/templates/TemplateSelector";
 export const steps: {
   title: string;
   component: React.ComponentType<EditorFormProps>;
   key: string;
 }[] = [
   { title: "General info", component: GeneralInfoForm, key: "general-info" },
+  { title: "Template", component: TemplateSelector, key: "template" },
   { title: "Personal info", component: PersonalInfoForm, key: "personal-info" },
   {
     title: "Work experience",
