@@ -23,7 +23,7 @@ export default function WorkExperienceSection({
           borderColor: colorHex,
         }}
       />
-      <div className={cn("mt-2 space-y-3", isModernTemplate && "space-y-2")}>
+      <div className={cn("mt-2 space-y-3")}>
         <p
           className="text-lg font-semibold"
           style={{
@@ -32,18 +32,18 @@ export default function WorkExperienceSection({
         >
           Work experience
         </p>
-        <div className={cn(isModernTemplate && "space-y-3")}>
+        <div className="space-y-3">
           {workExperiencesNotEmpty.map((exp, index) => (
             <div key={index} className="break-inside-avoid space-y-1">
               <div
-                className="flex items-center justify-between text-sm font-semibold"
+                className="flex items-center justify-between gap-4 text-sm font-semibold"
                 style={{
                   color: colorHex,
                 }}
               >
-                <span>{exp.position}</span>
+                <span className="flex-1">{exp.position}</span>
                 {exp.startDate && (
-                  <span className={cn(isModernTemplate && "text-xs")}>
+                  <span className="whitespace-nowrap text-right">
                     {formatDate(exp.startDate, "MM/yyyy")} -{" "}
                     {exp.endDate
                       ? formatDate(exp.endDate, "MM/yyyy")
