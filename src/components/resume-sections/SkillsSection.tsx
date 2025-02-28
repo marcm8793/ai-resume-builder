@@ -61,10 +61,7 @@ export default function SkillsSection({ resumeData }: ResumeSectionProps) {
                 {skillGroup.skillItems.map((skill, index) => (
                   <Badge
                     key={index}
-                    className={cn(
-                      "rounded-md bg-black text-white hover:bg-black",
-                      isModernTemplate && "mb-1",
-                    )}
+                    className="rounded-md bg-black text-white hover:bg-black"
                     style={{
                       backgroundColor: colorHex,
                       borderRadius:
