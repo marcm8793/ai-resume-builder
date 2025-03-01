@@ -2,9 +2,7 @@ import { cn } from "@/lib/utils";
 import { ResumeSectionProps } from "@/lib/types";
 
 export default function SummarySection({ resumeData }: ResumeSectionProps) {
-  const { summary, colorHex, templateId } = resumeData;
-  // TODO: Check if I need isModernTemplate
-  const isModernTemplate = templateId === "modern";
+  const { summary, colorHex } = resumeData;
 
   if (!summary) return null;
 
@@ -17,12 +15,7 @@ export default function SummarySection({ resumeData }: ResumeSectionProps) {
           borderColor: colorHex,
         }}
       />
-      <div
-        className={cn(
-          "mt-2 break-inside-avoid space-y-3",
-          isModernTemplate && "space-y-2",
-        )}
-      >
+      <div className="mt-2 break-inside-avoid space-y-3">
         <p
           className="text-lg font-semibold"
           style={{
@@ -31,14 +24,7 @@ export default function SummarySection({ resumeData }: ResumeSectionProps) {
         >
           Profile
         </p>
-        <div
-          className={cn(
-            "whitespace-pre-line text-sm",
-            isModernTemplate && "text-xs",
-          )}
-        >
-          {summary}
-        </div>
+        <div className="whitespace-pre-line text-sm">{summary}</div>
       </div>
     </div>
   );
