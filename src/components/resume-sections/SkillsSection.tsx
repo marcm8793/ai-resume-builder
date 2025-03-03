@@ -4,11 +4,9 @@ import { Badge } from "../ui/badge";
 import { ResumeSectionProps } from "@/lib/types";
 
 export default function SkillsSection({ resumeData }: ResumeSectionProps) {
-  const { skills, colorHex, borderStyle, templateId } = resumeData;
+  const { skills, colorHex, borderStyle } = resumeData;
 
   if (!skills?.length) return null;
-
-  const isModernTemplate = templateId === "modern";
 
   return (
     <div className="flex flex-col">
@@ -19,45 +17,24 @@ export default function SkillsSection({ resumeData }: ResumeSectionProps) {
         }}
       />
       <div className="mt-2 break-inside-avoid space-y-3">
-        <p
-          className={cn("text-lg font-semibold", isModernTemplate && "text-xl")}
-          style={{ color: colorHex }}
-        >
+        <p className="text-lg font-semibold" style={{ color: colorHex }}>
           Skills
         </p>
-        <div
-          className={cn(
-            "space-y-2",
-            isModernTemplate && "flex flex-col space-y-4",
-          )}
-        >
+        <div className="space-y-2">
           {skills.map((skillGroup, groupIndex) => (
             <div
               key={groupIndex}
-              className={cn(
-                "flex flex-wrap items-center gap-x-2 gap-y-1",
-                isModernTemplate && "flex-col items-start",
-              )}
+              className="flex flex-wrap items-center gap-x-2 gap-y-1"
             >
               {skillGroup.title && (
                 <span
-                  className={cn(
-                    "text-sm font-medium",
-                    isModernTemplate
-                      ? "mb-2 text-base font-semibold"
-                      : "min-w-[120px]",
-                  )}
-                  style={{ color: isModernTemplate ? colorHex : "inherit" }}
+                  className="min-w-[120px] text-sm font-medium"
+                  style={{ color: colorHex }}
                 >
                   {skillGroup.title}:
                 </span>
               )}
-              <div
-                className={cn(
-                  "flex flex-wrap items-center gap-1",
-                  isModernTemplate && "w-full",
-                )}
-              >
+              <div className={cn("flex flex-wrap items-center gap-1")}>
                 {skillGroup.skillItems.map((skill, index) => (
                   <Badge
                     key={index}

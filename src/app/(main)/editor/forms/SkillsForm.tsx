@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { EditorFormProps } from "@/lib/types";
 import { skillsSchema, SkillsValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -157,6 +157,31 @@ function SkillGroupItem({ id, form, index, remove }: SkillGroupItemProps) {
     isDragging,
   } = useSortable({ id });
 
+  // Create a state to track the raw input string
+  const [skillsInput, setSkillsInput] = useState(() => {
+    const skills = form.getValues(`skills.${index}.skillItems`);
+    return Array.isArray(skills) ? skills.join(", ") : "";
+  });
+
+  // Update form value when input changes
+  const handleSkillsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const inputValue = e.target.value;
+    setSkillsInput(inputValue);
+
+    // Only update the form value when we have actual content
+    if (inputValue.trim()) {
+      const skillsArray = inputValue
+        .split(",")
+        .map((skill) => skill.trim())
+        .filter(Boolean);
+      form.setValue(`skills.${index}.skillItems`, skillsArray, {
+        shouldValidate: true,
+      });
+    } else {
+      form.setValue(`skills.${index}.skillItems`, [], { shouldValidate: true });
+    }
+  };
+
   return (
     <div
       ref={setNodeRef}
@@ -200,31 +225,20 @@ function SkillGroupItem({ id, form, index, remove }: SkillGroupItemProps) {
           </FormItem>
         )}
       />
-      <FormField
-        control={form.control}
-        name={`skills.${index}.skillItems`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Skills</FormLabel>
-            <FormControl>
-              <Textarea
-                {...field}
-                placeholder="e.g. Python, Java, C++"
-                onChange={(e) => {
-                  const items = e.target.value
-                    .split(",")
-                    .map((item) => item.trim())
-                    .filter(Boolean);
-                  field.onChange(items);
-                }}
-                value={field.value?.join(", ")}
-              />
-            </FormControl>
-            <FormDescription>Separate each skill with a comma</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <FormItem>
+        <FormLabel>Skills</FormLabel>
+        <FormControl>
+          <Textarea
+            placeholder="e.g. Python, Java, C++"
+            value={skillsInput}
+            onChange={handleSkillsChange}
+          />
+        </FormControl>
+        <FormDescription>Separate each skill with a comma</FormDescription>
+        <FormMessage>
+          {form.formState.errors.skills?.[index]?.skillItems?.message}
+        </FormMessage>
+      </FormItem>
     </div>
   );
 }

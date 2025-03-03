@@ -5,8 +5,7 @@ import { ResumeSectionProps } from "@/lib/types";
 export default function WorkExperienceSection({
   resumeData,
 }: ResumeSectionProps) {
-  const { workExperiences, colorHex, templateId } = resumeData;
-  const isModernTemplate = templateId === "modern";
+  const { workExperiences, colorHex } = resumeData;
 
   const workExperiencesNotEmpty = workExperiences?.filter(
     (exp) => Object.values(exp).filter(Boolean).length > 0,
@@ -52,12 +51,7 @@ export default function WorkExperienceSection({
                 )}
               </div>
               <p className="text-xs font-semibold">{exp.company}</p>
-              <div
-                className={cn(
-                  "whitespace-pre-line text-xs font-semibold",
-                  isModernTemplate && "text-[10px]",
-                )}
-              >
+              <div className="whitespace-pre-line text-xs font-semibold">
                 {exp.description}
               </div>
             </div>
