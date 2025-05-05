@@ -18,10 +18,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { exportToWord } from "@/lib/docx-export";
 import { ResumeServerData } from "@/lib/types";
 import { mapToResumeValues } from "@/lib/utils";
 import { formatDate } from "date-fns";
-import { MoreVertical, Printer, Trash2 } from "lucide-react";
+import { FileText, MoreVertical, Printer, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useTransition } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -71,7 +72,11 @@ export default function ResumeItem({ resume }: ResumeItemProps) {
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
         </Link>
       </div>
-      <MoreMenu resumeId={resume.id} onPrintClick={reactToPrintFn} />
+      <MoreMenu
+        resumeId={resume.id}
+        onPrintClick={reactToPrintFn}
+        onExportClick={() => exportToWord(mapToResumeValues(resume))}
+      />
     </div>
   );
 }
@@ -79,9 +84,10 @@ export default function ResumeItem({ resume }: ResumeItemProps) {
 interface MoreMenuProps {
   resumeId: string;
   onPrintClick: () => void;
+  onExportClick: () => void;
 }
 
-function MoreMenu({ resumeId, onPrintClick }: MoreMenuProps) {
+function MoreMenu({ resumeId, onPrintClick, onExportClick }: MoreMenuProps) {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   return (
@@ -110,6 +116,13 @@ function MoreMenu({ resumeId, onPrintClick }: MoreMenuProps) {
           >
             <Printer className="size-4" />
             Print
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex items-center gap-2"
+            onClick={onExportClick}
+          >
+            <FileText className="size-4" />
+            Export to Word
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
