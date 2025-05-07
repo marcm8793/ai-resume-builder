@@ -10,6 +10,7 @@
 - ORM: Prisma
 - AI: OpenAI
 - Payments: Strip
+- [Favicon](https://hugeicons.com/icon/book-edit-stroke-rounded)
 
 ### Todo
 
@@ -17,7 +18,6 @@
 
 ### Deployment
 
-- [ ] new clerk, stripe, neon env
 - [ ] Setup customer portal directly on Stripe at: https://dashboard.stripe.com/test/settings/billing/portal
 - [ ] Adding all environment variables
 - [ ] Build and output settings>Install command: npm install --legacy-peer-deps
