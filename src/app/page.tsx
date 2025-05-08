@@ -1,5 +1,5 @@
 import logo from "@/assets/logo.svg";
-import resumePreview from "@/assets/resume-preview.jpg";
+import resumePreview from "@/assets/resume-preview.png";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";

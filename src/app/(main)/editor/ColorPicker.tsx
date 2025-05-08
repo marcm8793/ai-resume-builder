@@ -50,15 +50,28 @@ export default function ColorPicker({ color, onChange }: ColorPickerProps) {
           onChange={onChange}
           triangle="top-right"
           colors={[
-            "#FF6900",
-            "#FCB900",
-            "#7BDCB5",
-            "#00D084",
-            "#8ED1FC",
-            "#0693E3",
-            "#ABB8C3",
+            // Reds & Pinks
             "#EB144C",
             "#F78DA7",
+            // Oranges & Yellows
+            "#FF6900",
+            "#FCB900",
+            "#FFED00",
+            // Greens
+            "#7BDCB5",
+            "#417505",
+            "#00D084",
+            "#A4DD00",
+            // Blues
+            "#8ED1FC",
+            "#0693E3",
+            "#004DCF",
+            "#0075A2",
+            // Purples
+            "#9900EF",
+            "#653294",
+            // Grays & Black
+            "#ABB8C3",
             "#000000",
           ]}
         />
