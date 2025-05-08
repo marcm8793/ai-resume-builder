@@ -31,17 +31,17 @@ const features = [
 const pricingPlans = [
   {
     name: "Free",
-    price: "$0",
+    price: "0 €",
     features: ["1 resume", "Basic templates", "Standard export options"],
   },
   {
     name: "Premium",
-    price: "$9/month",
+    price: "1.99 €/month",
     features: ["AI tools", "Up to 3 resumes", "Priority support"],
   },
   {
     name: "Premium Plus",
-    price: "$15/month",
+    price: "7.99 €/month",
     features: [
       "Infinite resumes",
       "Design customizations",
