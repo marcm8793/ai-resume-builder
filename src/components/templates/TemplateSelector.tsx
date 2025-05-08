@@ -1,6 +1,7 @@
 import { TemplateValues } from "@/lib/validation";
 import { EditorFormProps } from "@/lib/types";
 import { getTemplates } from "./templateService";
+import ResumePreview from "@/components/ResumePreview";
 
 export default function TemplateSelector({
   resumeData,
@@ -32,6 +33,23 @@ export default function TemplateSelector({
               });
             }}
           >
+            <div className="mb-2 aspect-[210/297] w-full overflow-hidden rounded-md border">
+              <div
+                style={{
+                  transform: "scale(0.3)",
+                  transformOrigin: "top left",
+                  width: "calc(100% / 0.3)",
+                  height: "calc(100% / 0.3)",
+                }}
+              >
+                <ResumePreview
+                  resumeData={{
+                    ...resumeData,
+                    templateId: template.templateId || "classic",
+                  }}
+                />
+              </div>
+            </div>
             <h3 className="font-semibold">{template.name}</h3>
             <p className="text-sm text-muted-foreground">
               {template.description}

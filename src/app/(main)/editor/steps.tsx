@@ -12,7 +12,6 @@ export const steps: {
   key: string;
 }[] = [
   { title: "General info", component: GeneralInfoForm, key: "general-info" },
-  { title: "Template", component: TemplateSelector, key: "template" },
   { title: "Personal info", component: PersonalInfoForm, key: "personal-info" },
   {
     title: "Work experience",
@@ -26,4 +25,5 @@ export const steps: {
     component: SummaryForm,
     key: "summary",
   },
+  { title: "Template", component: TemplateSelector, key: "template" },
 ];
