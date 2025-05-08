@@ -14,6 +14,9 @@ import {
 import { ResumeValues } from "../validation";
 
 export function createClassicTemplate(resumeData: ResumeValues): Document {
+  // Use provided colorHex or default to a blue color
+  const themeColor = resumeData.colorHex || "#0366d6";
+
   const sections = [];
 
   // Header with name, job title and contact info
@@ -26,6 +29,7 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
         new TextRun({
           text: `${resumeData.firstName || ""} ${resumeData.lastName || ""}`,
           bold: true,
+          color: themeColor,
         }),
       ],
       heading: HeadingLevel.HEADING_1,
@@ -156,6 +160,13 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
   sections.push(
     new Paragraph({
       thematicBreak: true,
+      border: {
+        bottom: {
+          color: themeColor,
+          style: BorderStyle.SINGLE,
+          size: 12,
+        },
+      },
       spacing: {
         after: 120,
       },
@@ -170,6 +181,7 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
           new TextRun({
             text: "Profile",
             bold: true,
+            color: themeColor,
           }),
         ],
         heading: HeadingLevel.HEADING_2,
@@ -186,6 +198,13 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
       }),
       new Paragraph({
         thematicBreak: true,
+        border: {
+          bottom: {
+            color: themeColor,
+            style: BorderStyle.SINGLE,
+            size: 12,
+          },
+        },
         spacing: {
           after: 120,
         },
@@ -201,6 +220,7 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
           new TextRun({
             text: "Work experience",
             bold: true,
+            color: themeColor,
           }),
         ],
         heading: HeadingLevel.HEADING_2,
@@ -240,6 +260,7 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
             new TextRun({
               text: job.position || "",
               bold: true,
+              color: themeColor,
             }),
             new TextRun({
               text: job.company ? `, ${job.company}` : "",
@@ -291,6 +312,13 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
     sections.push(
       new Paragraph({
         thematicBreak: true,
+        border: {
+          bottom: {
+            color: themeColor,
+            style: BorderStyle.SINGLE,
+            size: 12,
+          },
+        },
         spacing: {
           after: 120,
         },
@@ -306,6 +334,7 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
           new TextRun({
             text: "Education",
             bold: true,
+            color: themeColor,
           }),
         ],
         heading: HeadingLevel.HEADING_2,
@@ -345,6 +374,7 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
             new TextRun({
               text: edu.degree || "",
               bold: true,
+              color: themeColor,
             }),
             new TextRun({
               text: "\t",
@@ -383,6 +413,13 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
     sections.push(
       new Paragraph({
         thematicBreak: true,
+        border: {
+          bottom: {
+            color: themeColor,
+            style: BorderStyle.SINGLE,
+            size: 12,
+          },
+        },
         spacing: {
           after: 120,
         },
@@ -398,6 +435,7 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
           new TextRun({
             text: "Skills",
             bold: true,
+            color: themeColor,
           }),
         ],
         heading: HeadingLevel.HEADING_2,
@@ -417,6 +455,7 @@ export function createClassicTemplate(resumeData: ResumeValues): Document {
           new TextRun({
             text: `${skillGroup.title}:`,
             bold: true,
+            color: themeColor,
           }),
         );
       }

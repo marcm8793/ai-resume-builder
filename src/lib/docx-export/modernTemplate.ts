@@ -15,6 +15,9 @@ import {
 import { ResumeValues } from "../validation";
 
 export function createModernTemplate(resumeData: ResumeValues): Document {
+  // Use provided colorHex or default to a blue color
+  const themeColor = resumeData.colorHex || "#0366d6";
+
   const sections = [];
 
   // Header with name, job title and contact info (similar to classic)
@@ -27,6 +30,7 @@ export function createModernTemplate(resumeData: ResumeValues): Document {
         new TextRun({
           text: `${resumeData.firstName || ""} ${resumeData.lastName || ""}`,
           bold: true,
+          color: themeColor,
         }),
       ],
       heading: HeadingLevel.HEADING_1,
@@ -156,10 +160,19 @@ export function createModernTemplate(resumeData: ResumeValues): Document {
     leftColumnChildren.push(
       new Paragraph({
         thematicBreak: true,
+        border: {
+          bottom: {
+            color: themeColor,
+            style: BorderStyle.SINGLE,
+            size: 12,
+          },
+        },
         spacing: { before: 120, after: 60 },
       }),
       new Paragraph({
-        children: [new TextRun({ text: "Summary", bold: true })],
+        children: [
+          new TextRun({ text: "Profile", bold: true, color: themeColor }),
+        ],
         heading: HeadingLevel.HEADING_2,
         spacing: { after: 120 },
       }),
@@ -175,11 +188,20 @@ export function createModernTemplate(resumeData: ResumeValues): Document {
     leftColumnChildren.push(
       new Paragraph({
         thematicBreak: true,
+        border: {
+          bottom: {
+            color: themeColor,
+            style: BorderStyle.SINGLE,
+            size: 12,
+          },
+        },
         spacing: { before: 120, after: 60 },
       }),
 
       new Paragraph({
-        children: [new TextRun({ text: "Skills", bold: true })],
+        children: [
+          new TextRun({ text: "Skills", bold: true, color: themeColor }),
+        ],
         heading: HeadingLevel.HEADING_2,
         spacing: { after: 120 },
       }),
@@ -188,7 +210,11 @@ export function createModernTemplate(resumeData: ResumeValues): Document {
       const paragraphChildren: TextRun[] = [];
       if (skillGroup.title) {
         paragraphChildren.push(
-          new TextRun({ text: `${skillGroup.title}:`, bold: true }),
+          new TextRun({
+            text: `${skillGroup.title}:`,
+            bold: true,
+            color: themeColor,
+          }),
         );
       }
       if (skillGroup.skillItems && skillGroup.skillItems.length > 0) {
@@ -224,10 +250,23 @@ export function createModernTemplate(resumeData: ResumeValues): Document {
     rightColumnChildren.push(
       new Paragraph({
         thematicBreak: true,
+        border: {
+          bottom: {
+            color: themeColor,
+            style: BorderStyle.SINGLE,
+            size: 12,
+          },
+        },
         spacing: { before: 120, after: 60 },
       }),
       new Paragraph({
-        children: [new TextRun({ text: "Work experience", bold: true })],
+        children: [
+          new TextRun({
+            text: "Work experience",
+            bold: true,
+            color: themeColor,
+          }),
+        ],
         heading: HeadingLevel.HEADING_2,
         spacing: { after: 120 },
       }),
@@ -243,12 +282,16 @@ export function createModernTemplate(resumeData: ResumeValues): Document {
       rightColumnChildren.push(
         new Paragraph({
           children: [
-            new TextRun({ text: job.position || "", bold: true }),
+            new TextRun({
+              text: job.position || "",
+              bold: true,
+              color: themeColor,
+            }),
             new TextRun({
               text: job.company ? `, ${job.company}` : "",
               bold: true,
             }),
-            new TextRun({ text: "	" }),
+            new TextRun({ text: "\t" }),
             new TextRun({ text: dateString, color: "666666" }),
           ],
           tabStops: [{ type: TabStopType.RIGHT, position: 7000 }],
@@ -283,11 +326,20 @@ export function createModernTemplate(resumeData: ResumeValues): Document {
     rightColumnChildren.push(
       new Paragraph({
         thematicBreak: true,
+        border: {
+          bottom: {
+            color: themeColor,
+            style: BorderStyle.SINGLE,
+            size: 12,
+          },
+        },
         spacing: { before: 120, after: 60 },
       }),
 
       new Paragraph({
-        children: [new TextRun({ text: "Education", bold: true })],
+        children: [
+          new TextRun({ text: "Education", bold: true, color: themeColor }),
+        ],
         heading: HeadingLevel.HEADING_2,
         spacing: { after: 120 },
       }),
@@ -303,8 +355,12 @@ export function createModernTemplate(resumeData: ResumeValues): Document {
       rightColumnChildren.push(
         new Paragraph({
           children: [
-            new TextRun({ text: edu.degree || "", bold: true }),
-            new TextRun({ text: "	" }),
+            new TextRun({
+              text: edu.degree || "",
+              bold: true,
+              color: themeColor,
+            }),
+            new TextRun({ text: "\t" }),
             new TextRun({ text: dateString, color: "666666" }),
           ],
           tabStops: [{ type: TabStopType.RIGHT, position: 7000 }],
