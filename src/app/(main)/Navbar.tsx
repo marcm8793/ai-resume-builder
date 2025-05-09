@@ -4,13 +4,16 @@ import logo from "@/assets/logo.svg";
 import ThemeToggle from "@/components/ThemeToggle";
 import { UserButton } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import { CreditCard } from "lucide-react";
+import { CreditCard, MessageSquare } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
+import FeedbackModal from "@/components/feedback/FeedbackModal";
+import useFeedbackModal from "@/hooks/useFeedbackModal";
 
 export default function Navbar() {
   const { theme } = useTheme();
+  const { setOpen: setFeedbackOpen } = useFeedbackModal();
 
   return (
     <header className="shadow-sm">
@@ -40,10 +43,16 @@ export default function Navbar() {
                 labelIcon={<CreditCard className="size-4" />}
                 href="/billing"
               />
+              <UserButton.Action
+                label="Feedback"
+                labelIcon={<MessageSquare className="size-4" />}
+                onClick={() => setFeedbackOpen(true)}
+              />
             </UserButton.MenuItems>
           </UserButton>
         </div>
       </div>
+      <FeedbackModal />
     </header>
   );
 }
