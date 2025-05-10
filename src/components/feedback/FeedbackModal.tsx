@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import emailjs from "@emailjs/browser";
 import {
   Dialog,
   DialogContent,
@@ -23,30 +24,54 @@ import {
   FormMessage,
 } from "../ui/form";
 import useFeedbackModal from "@/hooks/useFeedbackModal";
+import { useUser } from "@clerk/nextjs";
 
 const feedbackSchema = z.object({
   message: z.string().min(1, { message: "Feedback is required" }),
+  email: z.string().email({ message: "Please enter a valid email" }),
 });
 
 type FeedbackForm = z.infer<typeof feedbackSchema>;
+
+// EmailJS configuration
+const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "";
+const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "";
+const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "";
 
 export default function FeedbackModal() {
   const { open, setOpen } = useFeedbackModal();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-
+  const { user } = useUser();
   const form = useForm<FeedbackForm>({
     resolver: zodResolver(feedbackSchema),
     defaultValues: {
       message: "",
+      email: user?.emailAddresses[0].emailAddress,
     },
   });
 
   async function onSubmit(data: FeedbackForm) {
     try {
       setLoading(true);
-      // In a real app, you would send the feedback to your API
-      console.log("Feedback submitted:", data);
+
+      // Prepare template parameters for EmailJS
+      const templateParams = {
+        message: data.message,
+        from_email: user?.emailAddresses[0].emailAddress || "Not provided",
+        from_name: user?.fullName || "Boring Resume User",
+        to_name: "Boring Resume Team",
+      };
+
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY,
+      );
+
+      console.log("EmailJS response:", response);
 
       toast({
         description: "Thank you for your feedback!",
@@ -55,7 +80,7 @@ export default function FeedbackModal() {
       setOpen(false);
       form.reset();
     } catch (error) {
-      console.error(error);
+      console.error("Error sending feedback:", error);
       toast({
         variant: "destructive",
         description: "Something went wrong. Please try again.",
@@ -86,6 +111,26 @@ export default function FeedbackModal() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <Label htmlFor="email">Your email</Label>
+                  <FormControl>
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="your.email@example.com"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="message"
               render={({ field }) => (
                 <FormItem>
@@ -112,7 +157,7 @@ export default function FeedbackModal() {
                 Cancel
               </Button>
               <Button type="submit" disabled={loading}>
-                Submit Feedback
+                {loading ? "Sending..." : "Submit Feedback"}
               </Button>
             </div>
           </form>
