@@ -10,10 +10,20 @@ import Image from "next/image";
 import Link from "next/link";
 import FeedbackModal from "@/components/feedback/FeedbackModal";
 import useFeedbackModal from "@/hooks/useFeedbackModal";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const { theme } = useTheme();
   const { setOpen: setFeedbackOpen } = useFeedbackModal();
+  const [systemIsDark, setSystemIsDark] = useState(false);
+
+  useEffect(() => {
+    // Check if system theme is dark
+    if (typeof window !== "undefined") {
+      const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      setSystemIsDark(isDark);
+    }
+  }, []);
 
   return (
     <header className="shadow-sm">
@@ -28,7 +38,10 @@ export default function Navbar() {
           <ThemeToggle />
           <UserButton
             appearance={{
-              baseTheme: theme === "dark" ? dark : undefined,
+              baseTheme:
+                theme === "dark" || (theme === "system" && systemIsDark)
+                  ? dark
+                  : undefined,
               elements: {
                 avatarBox: {
                   width: 35,
