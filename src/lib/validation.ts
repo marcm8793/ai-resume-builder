@@ -133,3 +133,10 @@ export const generateSummarySchema = z.object({
 });
 
 export type GenerateSummaryInput = z.infer<typeof generateSummarySchema>;
+
+export const feedbackSchema = z.object({
+  message: z.string().min(1, { message: "Feedback is required" }),
+  email: z.string().email({ message: "Please enter a valid email" }),
+});
+
+export type FeedbackForm = z.infer<typeof feedbackSchema>;

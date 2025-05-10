@@ -15,7 +15,6 @@ import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -25,24 +24,19 @@ import {
 } from "../ui/form";
 import useFeedbackModal from "@/hooks/useFeedbackModal";
 import { useUser } from "@clerk/nextjs";
-
-const feedbackSchema = z.object({
-  message: z.string().min(1, { message: "Feedback is required" }),
-  email: z.string().email({ message: "Please enter a valid email" }),
-});
-
-type FeedbackForm = z.infer<typeof feedbackSchema>;
-
+import { feedbackSchema, FeedbackForm } from "@/lib/validation";
+import { env } from "@/env";
 // EmailJS configuration
-const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "";
-const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "";
-const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "";
+const EMAILJS_SERVICE_ID = env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
 export default function FeedbackModal() {
   const { open, setOpen } = useFeedbackModal();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
+
   const form = useForm<FeedbackForm>({
     resolver: zodResolver(feedbackSchema),
     defaultValues: {
@@ -64,14 +58,12 @@ export default function FeedbackModal() {
       };
 
       // Send email using EmailJS
-      const response = await emailjs.send(
+      await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         templateParams,
         EMAILJS_PUBLIC_KEY,
       );
-
-      console.log("EmailJS response:", response);
 
       toast({
         description: "Thank you for your feedback!",

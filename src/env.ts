@@ -23,6 +23,9 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY: z.string().min(1),
     NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_PLUS_MONTHLY: z.string().min(1),
     NEXT_PUBLIC_BASE_URL: z.string().min(1).url(),
+    NEXT_PUBLIC_EMAILJS_SERVICE_ID: z.string().min(1),
+    NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: z.string().min(1),
+    NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: z.string().min(1),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
@@ -36,5 +39,9 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_PLUS_MONTHLY:
       process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_PLUS_MONTHLY,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_EMAILJS_SERVICE_ID: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+    NEXT_PUBLIC_EMAILJS_TEMPLATE_ID:
+      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+    NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
   },
 });
